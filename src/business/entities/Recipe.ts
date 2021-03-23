@@ -9,9 +9,10 @@ export class Recipe {
  }
  
  export interface RecipeInputDTO {
-   title: string;
+   title?: string;
    body: string
  }
+
  
  export interface AuthenticationData {
     id: string;

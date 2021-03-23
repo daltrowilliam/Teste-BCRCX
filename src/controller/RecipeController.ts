@@ -40,14 +40,15 @@ export class RecipeController {
 
          const { authorization } = req.headers
 
+         const id = req.params.id;
+
          const input: RecipeInputDTO = {
-            title: req.body.title,
             body: req.body.body
          }
 
-         const registry = await recipeBusiness.registryRecipe(input, authorization);
+         const message = await recipeBusiness.alterRecipe(id, input, authorization);
 
-         res.status(200).send({ registry });
+         res.status(200).send({ message });
 
       } catch (error) {
          res

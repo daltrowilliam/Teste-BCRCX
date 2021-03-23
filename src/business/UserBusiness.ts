@@ -17,38 +17,29 @@ export class UserBusiness {
    async createUser(user: UserInputDTO) {
            
       if (
-         !user.name ||
-         !user.email ||
-         !user.password ||
-         !user.nickname
+         !user.username ||
+         !user.password
      ) {
-      throw new CustomError(400, "'name', 'email', 'password' and 'nickname', must be informed!");
+      throw new CustomError(400, "'name', and 'password', must be informed!");
      }
 
      if (user.password.length < 6) {
          throw new CustomError(400, "Your password must have 6 characters at least")
      }
-
-     if (user.email.indexOf("@") === -1) {
-         throw new CustomError(400, "Invalid email")
-     }
-
      
-      const userFromDB = await this.userDatabase.getUserByEmail(user.email);
+      const userFromDB = await this.userDatabase.getUserByUsername(user.username);
 
       if (userFromDB) {
-         throw new CustomError(400, "Email already exist!");
+         throw new CustomError(400, "username already exist!");
       }
-
+ 
       const id = this.idGenerator.generate();
 
       const hashPassword = await this.hashManager.hash(user.password);
 
       await this.userDatabase.createUser(
          id,
-         user.email,
-         user.name,
-         user.nickname,
+         user.username,
          hashPassword
       );
 
@@ -62,11 +53,11 @@ export class UserBusiness {
    async login(user: LoginInputDTO) {
 
 
-      if (!user.email || !user.password) {
-         throw new CustomError(400, "'email' and 'password' must be informed!");
+      if (!user.username || !user.password) {
+         throw new CustomError(400, "'username' and 'password' must be informed!");
       }
 
-      const userFromDB = await this.userDatabase.getUserByEmail(user.email);
+      const userFromDB = await this.userDatabase.getUserByUsername(user.username);
 
       if (!userFromDB) {
          throw new CustomError(404, "User Not Found!");
@@ -85,8 +76,6 @@ export class UserBusiness {
          id: userFromDB.id
       });
 
-      const username = userFromDB.name
-
-      return {accessToken, username};
+      return accessToken;
    }
 }

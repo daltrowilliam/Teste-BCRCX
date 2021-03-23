@@ -18,10 +18,8 @@ export class UserController {
       try {
 
          const input: UserInputDTO = {
-            email: req.body.email,
-            name: req.body.name,
-            nickname: req.body.nickname,
-            password: req.body.password,
+            username: req.body.username,
+            password: req.body.password
          }
 
          const token = await userBusiness.createUser(input);
@@ -40,13 +38,13 @@ export class UserController {
       try {
 
          const loginData: LoginInputDTO = {
-            email: req.body.email,
+            username: req.body.username,
             password: req.body.password
          };
 
-         const result = await userBusiness.login(loginData);
+         const token = await userBusiness.login(loginData);
         
-         res.status(200).send({ result });
+         res.status(200).send({ token });
 
       } catch (error) {
          res

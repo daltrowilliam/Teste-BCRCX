@@ -4,32 +4,26 @@ import { CustomError } from "../business/error/CustomError";
 
 export class UserDatabase extends BaseDatabase {
 
-   private static TABLE_NAME = "kordasights_users";
+   private static TABLE_NAME = "bcrcx_users";
 
    private static toUserModel(user: any): User {
       return user && new User(
          user.id,
-         user.name,
-         user.email,
-         user.nickname,
+         user.username,
          user.password
       );
    }
 
    public async createUser(
       id: string,
-      email: string,
-      name: string,
-      nickname: string,
+      username: string,
       password: string
    ): Promise<void> {
       try {
          await BaseDatabase.connection
             .insert({
                id,
-               email,
-               name,
-               nickname,
+               username,
                password
             })
             .into(UserDatabase.TABLE_NAME);
@@ -38,12 +32,12 @@ export class UserDatabase extends BaseDatabase {
       }
    }
 
-   public async getUserByEmail(email: string): Promise<User> {
+   public async getUserByUsername(username: string): Promise<User> {
       try {
          const result = await BaseDatabase.connection
             .select("*")
             .from(UserDatabase.TABLE_NAME)
-            .where({ email });
+            .where({ username });
 
          return UserDatabase.toUserModel(result[0]);
       } catch (error) {

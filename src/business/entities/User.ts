@@ -13,7 +13,6 @@ export interface UserInputDTO {
    password: string;
 }
 
-// Verificar se tem utilidade
 export interface LoginInputDTO {
    username: string;
    password: string;

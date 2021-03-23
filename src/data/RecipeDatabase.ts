@@ -4,8 +4,7 @@ import { CustomError } from "../business/error/CustomError";
 
 export class RecipeDatabase extends BaseDatabase {
 
-   //Alterar o nome da tabela
-   private static TABLE_NAME = "kordasights_images";
+   private static TABLE_NAME = "bcrcx_recipes";
 
    private static toRecipeModel(recipe: any): Recipe {
       return new Recipe(
@@ -21,7 +20,7 @@ export class RecipeDatabase extends BaseDatabase {
       id: string,
       title: string,
       body: string,
-      user: string
+      user_id: string
    ): Promise<void> {
       try {
          await BaseDatabase.connection
@@ -29,7 +28,7 @@ export class RecipeDatabase extends BaseDatabase {
                id,
                title,
                body,
-               user
+               user_id
             })
             .into(RecipeDatabase.TABLE_NAME);
       } catch (error) {
@@ -37,6 +36,20 @@ export class RecipeDatabase extends BaseDatabase {
       }
    }
 
+   public async alterRecipe(
+      id: string,
+      body: string,
+   ): Promise<void> {
+      try {
+         const result = await BaseDatabase.connection.raw(`
+            UPDATE ${RecipeDatabase.TABLE_NAME}
+            SET body = '${body}'
+            WHERE id = '${id}';
+         `)
+      } catch (error) {
+         throw new CustomError(500, "An unexpected error ocurred");
+      }
+   }
 
 
    public async getRecipeById(id: string): Promise<Recipe> {

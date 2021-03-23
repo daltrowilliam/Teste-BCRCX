@@ -80,8 +80,7 @@ export class RecipeBusiness {
    }
 
 
-   // Fazer esta função
-/*    async alterRecipe(recipe: RecipeInputDTO, authorization: string | undefined) {
+   async alterRecipe(id: string, recipe: RecipeInputDTO, authorization: string | undefined) {
 
       const tokenData: AuthenticationData = this.authenticator.getData(authorization!)
 
@@ -89,24 +88,26 @@ export class RecipeBusiness {
          throw new CustomError(403, "Invalid Token")
       }
 
+      const recipeFromDB = await this.recipeDatabase.getRecipeById(id);
+
+      if (!recipeFromDB) {
+         throw new CustomError(404, "Recipe Not Found!");
+      }
             
       if (
-         !recipe.title ||
          !recipe.body
      ) {
-      throw new CustomError(400, "'title' and 'body' must be informed!");
+      throw new CustomError(400, "'body' must be informed!");
      }
 
-      const id = this.idGenerator.generate();
 
       await this.recipeDatabase.alterRecipe(
          id,
-         recipe.title,
-         recipe.body
+         recipe.body,
       );
 
       return "Recipe Altered!";
-   } */
+   }
 
    async getAllRecipes(authorization: string | undefined) {
 
@@ -119,7 +120,7 @@ export class RecipeBusiness {
       const recipes = await this.recipeDatabase.getAllRecipes();
 
       if (!recipes) {
-         throw new CustomError(404, "Image Not Found!");
+         throw new CustomError(404, "Recipe Not Found!");
       }
 
       return recipes;
