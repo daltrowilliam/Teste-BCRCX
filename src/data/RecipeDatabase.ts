@@ -11,6 +11,7 @@ export class RecipeDatabase extends BaseDatabase {
          recipe.id,
          recipe.title,
          recipe.body,
+         recipe.tags,
          recipe.user
       );
    }
@@ -20,6 +21,7 @@ export class RecipeDatabase extends BaseDatabase {
       id: string,
       title: string,
       body: string,
+      tags: [],
       user_id: string
    ): Promise<void> {
       try {
@@ -28,6 +30,7 @@ export class RecipeDatabase extends BaseDatabase {
                id,
                title,
                body,
+               tags,
                user_id
             })
             .into(RecipeDatabase.TABLE_NAME);
@@ -39,11 +42,13 @@ export class RecipeDatabase extends BaseDatabase {
    public async alterRecipe(
       id: string,
       body: string,
+      tags: []
    ): Promise<void> {
       try {
          const result = await BaseDatabase.connection.raw(`
             UPDATE ${RecipeDatabase.TABLE_NAME}
             SET body = '${body}'
+            SET tags = '${tags}'
             WHERE id = '${id}';
          `)
       } catch (error) {
@@ -57,6 +62,20 @@ export class RecipeDatabase extends BaseDatabase {
          const result = await BaseDatabase.connection.raw(`
             SELECT * FROM ${RecipeDatabase.TABLE_NAME}
             WHERE id = '${id}';
+         `)
+
+         return RecipeDatabase.toRecipeModel(result[0][0]);
+
+      } catch (error) {
+         throw new CustomError(500, "An unexpected error ocurred");
+      }
+   }
+
+   public async getRecipeByTag(tag: string): Promise<Recipe> {
+      try {
+         const result = await BaseDatabase.connection.raw(`
+            SELECT * FROM ${RecipeDatabase.TABLE_NAME}
+            WHERE tags LIKE '%${tag}%';
          `)
 
          return RecipeDatabase.toRecipeModel(result[0][0]);

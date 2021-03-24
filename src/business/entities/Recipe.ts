@@ -3,14 +3,16 @@ export class Recipe {
        public readonly id: string,
        public readonly title: string,
        public readonly body: string,
-       public readonly user: [],
+       public readonly tags: [],
+       public readonly user: string,
     ) { }
  
  }
  
  export interface RecipeInputDTO {
    title?: string;
-   body: string
+   tags?: [];
+   body: string;
  }
 
  

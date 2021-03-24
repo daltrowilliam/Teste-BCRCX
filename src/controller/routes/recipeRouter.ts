@@ -11,3 +11,4 @@ recipeRouter.put("/alter/:id", recipeController.alterRecipe);
 recipeRouter.delete("/delete/:id", recipeController.deleteRecipeById);
 recipeRouter.get("/", recipeController.getAllRecipes);
 recipeRouter.get("/:id", recipeController.getRecipeById);
+recipeRouter.get("/?tags", recipeController.getRecipeByTags);

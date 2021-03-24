@@ -21,6 +21,7 @@ export class RecipeController {
 
          const input: RecipeInputDTO = {
             title: req.body.title,
+            tags: req.body.tags,
             body: req.body.body
          }
 
@@ -43,7 +44,8 @@ export class RecipeController {
          const id = req.params.id;
 
          const input: RecipeInputDTO = {
-            body: req.body.body
+            body: req.body.body,
+            tags: req.body.tags
          }
 
          const message = await recipeBusiness.alterRecipe(id, input, authorization);
@@ -67,6 +69,25 @@ export class RecipeController {
          const id = req.params.id;
 
          const recipe = await recipeBusiness.getRecipeById(id, authorization);
+
+         res.status(200).send({ recipe });
+
+      } catch (error) {
+         res
+            .status(error.statusCode || 400)
+            .send({ error: error.message });
+      }
+   }
+
+   async getRecipeByTags(req: Request, res: Response) {
+
+      const { authorization } = req.headers
+
+      try {
+
+         const tag = req.query.tag as string;
+
+         const recipe = await recipeBusiness.getRecipeByTags(tag, authorization);
 
          res.status(200).send({ recipe });
 

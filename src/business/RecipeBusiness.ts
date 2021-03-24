@@ -21,13 +21,13 @@ export class RecipeBusiness {
       if (!tokenData) {
          throw new CustomError(403, "Invalid Token")
       }
-
             
       if (
          !recipe.title ||
+         !recipe.tags ||
          !recipe.body
      ) {
-      throw new CustomError(400, "'title' and 'body' must be informed!");
+      throw new CustomError(400, "'title', 'body' and 'tags' must be informed!");
      }
 
       const id = this.idGenerator.generate();
@@ -38,6 +38,7 @@ export class RecipeBusiness {
          id,
          recipe.title,
          recipe.body,
+         recipe.tags,
          user
       );
 
@@ -60,6 +61,24 @@ export class RecipeBusiness {
 
       return recipe;
    }
+
+   async getRecipeByTags(tag: string, authorization: string | undefined) {
+
+      const tokenData: AuthenticationData = this.authenticator.getData(authorization!)
+
+      if (!tokenData) {
+         throw new CustomError(403, "Invalid Token")
+      }
+
+      const recipe = await this.recipeDatabase.getRecipeByTag(tag);
+
+      if (!recipe) {
+         throw new CustomError(404, "Recipe Not Found!");
+      }
+
+      return recipe;
+   }
+
 
    async deleteRecipeById(id: string, authorization: string | undefined) {
 
@@ -93,17 +112,30 @@ export class RecipeBusiness {
       if (!recipeFromDB) {
          throw new CustomError(404, "Recipe Not Found!");
       }
-            
+
+
       if (
-         !recipe.body
+         !recipe.body && !recipe.tags
      ) {
-      throw new CustomError(400, "'body' must be informed!");
+      throw new CustomError(400, "'body' OR ´tags´ must be informed!");
      }
+
+      let body = recipeFromDB.body
+      let tags = recipeFromDB.tags
+
+      if (recipe.body) {
+         body = recipe.body
+      }
+
+      if (recipe.tags) {
+         tags = recipe.tags
+      }
 
 
       await this.recipeDatabase.alterRecipe(
          id,
-         recipe.body,
+         body,
+         tags
       );
 
       return "Recipe Altered!";
