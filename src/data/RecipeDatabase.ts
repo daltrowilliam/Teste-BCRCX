@@ -7,7 +7,7 @@ export class RecipeDatabase extends BaseDatabase {
    private static TABLE_NAME = "bcrcx_recipes";
 
    private static toRecipeModel(recipe: any): Recipe {
-      return new Recipe(
+      return recipe && new Recipe(
          recipe.id,
          recipe.title,
          recipe.body,
@@ -47,8 +47,7 @@ export class RecipeDatabase extends BaseDatabase {
       try {
          const result = await BaseDatabase.connection.raw(`
             UPDATE ${RecipeDatabase.TABLE_NAME}
-            SET body = '${body}'
-            SET tags = '${tags}'
+            SET body = '${body}', tags = '${tags}'
             WHERE id = '${id}';
          `)
       } catch (error) {
@@ -67,6 +66,7 @@ export class RecipeDatabase extends BaseDatabase {
          return RecipeDatabase.toRecipeModel(result[0][0]);
 
       } catch (error) {
+         console.log("Mensagem de Erro:", error)
          throw new CustomError(500, "An unexpected error ocurred");
       }
    }

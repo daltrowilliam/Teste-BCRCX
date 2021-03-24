@@ -86,6 +86,7 @@ export class RecipeController {
       try {
 
          const tag = req.query.tag as string;
+         console.log("TAG:", tag)
 
          const recipe = await recipeBusiness.getRecipeByTags(tag, authorization);
 

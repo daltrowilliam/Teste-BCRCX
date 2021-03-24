@@ -113,7 +113,6 @@ export class RecipeBusiness {
          throw new CustomError(404, "Recipe Not Found!");
       }
 
-
       if (
          !recipe.body && !recipe.tags
      ) {
@@ -130,7 +129,6 @@ export class RecipeBusiness {
       if (recipe.tags) {
          tags = recipe.tags
       }
-
 
       await this.recipeDatabase.alterRecipe(
          id,
