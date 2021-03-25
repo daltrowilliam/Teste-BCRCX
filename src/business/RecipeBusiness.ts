@@ -62,7 +62,7 @@ export class RecipeBusiness {
       return recipe;
    }
 
-   async getRecipeByTags(tag: string, authorization: string | undefined) {
+   async getRecipeByTags(tag: any, authorization: string | undefined) {
 
       const tokenData: AuthenticationData = this.authenticator.getData(authorization!)
 
@@ -70,7 +70,11 @@ export class RecipeBusiness {
          throw new CustomError(403, "Invalid Token")
       }
 
+      console.log(tag)
+
       const recipe = await this.recipeDatabase.getRecipeByTag(tag);
+
+      console.log(recipe)
 
       if (!recipe) {
          throw new CustomError(404, "Recipe Not Found!");

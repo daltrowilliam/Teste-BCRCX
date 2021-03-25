@@ -81,7 +81,7 @@ export class RecipeDatabase extends BaseDatabase {
          return RecipeDatabase.toRecipeModel(result[0][0]);
 
       } catch (error) {
-         throw new CustomError(500, "Função errada An unexpected error ocurred");
+         throw new CustomError(500, "An unexpected error ocurred");
       }
    }
 
