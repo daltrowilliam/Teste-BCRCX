@@ -77,7 +77,7 @@ export class RecipeDatabase extends BaseDatabase {
             SELECT * FROM ${RecipeDatabase.TABLE_NAME}
             WHERE tags LIKE '%${tag}%';
          `)
-
+         console.log(result[0][0])
          return result[0];
 
       } catch (error) {

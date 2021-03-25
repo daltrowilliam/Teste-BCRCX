@@ -71,9 +71,9 @@ export class RecipeBusiness {
       }
 
       const recipe = await this.recipeDatabase.getRecipeByTag(tag);
+      console.log(recipe)
 
-
-      if (!recipe.tags) {
+      if (!recipe) {
          throw new CustomError(404, "Recipe Not Found!");
       }
 
