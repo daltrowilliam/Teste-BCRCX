@@ -66,7 +66,6 @@ export class RecipeDatabase extends BaseDatabase {
          return RecipeDatabase.toRecipeModel(result[0][0]);
 
       } catch (error) {
-         console.log("Mensagem de Erro:", error)
          throw new CustomError(500, "An unexpected error ocurred");
       }
    }
@@ -77,8 +76,6 @@ export class RecipeDatabase extends BaseDatabase {
             SELECT * FROM ${RecipeDatabase.TABLE_NAME}
             WHERE tags LIKE '%${tag}%';
          `)
-
-         console.log("Result00:", result[0][0])
 
          return result[0];
 
