@@ -70,10 +70,9 @@ export class RecipeBusiness {
          throw new CustomError(403, "Invalid Token")
       }
 
-      const recipe = await this.recipeDatabase.getRecipeByTag(tag);
-      console.log(recipe)
-
-      if (!recipe) {
+      const recipe: any = await this.recipeDatabase.getRecipeByTag(tag);
+   
+      if (recipe.length === 0) {
          throw new CustomError(404, "Recipe Not Found!");
       }
 
